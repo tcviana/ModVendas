@@ -1,0 +1,109 @@
+unit formModelo;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.ExtCtrls, System.Actions, Vcl.ActnList, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Datasnap.DBClient,
+  Data.FireDACJSONReflect;
+
+type
+  TfrmModelo = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    ActionList1: TActionList;
+    btnNovo: TButton;
+    btnEditar: TButton;
+    btnRemover: TButton;
+    btnSair: TButton;
+    actNovo: TAction;
+    actEditar: TAction;
+    actRemover: TAction;
+    actSair: TAction;
+    actPesquisar: TAction;
+    lblNome: TLabel;
+    Button3: TButton;
+    edtPesquisar: TButtonedEdit;
+    DBGrid1: TDBGrid;
+    dsPesquisa: TDataSource;
+    memPesquisa: TFDMemTable;
+    procedure actSairExecute(Sender: TObject);
+    procedure edtPesquisarKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actEditarExecute(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure actPesquisarExecute(Sender: TObject);
+  private
+    { Private declarations }
+  protected
+    procedure PopularMemoria(pJson:TFDJSONDataSets);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmModelo: TfrmModelo;
+
+implementation
+
+{$R *.dfm}
+
+uses dmVendas;
+
+procedure TfrmModelo.actEditarExecute(Sender: TObject);
+begin
+  // abre tela de edição
+end;
+
+procedure TfrmModelo.actPesquisarExecute(Sender: TObject);
+begin
+  //TClientDataSet(dsPesquisa.DataSet).Active := False;
+  //TClientDataSet(dsPesquisa.DataSet).Active := True;
+end;
+
+procedure TfrmModelo.actSairExecute(Sender: TObject);
+begin
+  Self.Close;
+end;
+
+procedure TfrmModelo.DBGrid1DblClick(Sender: TObject);
+begin
+  actEditar.Execute;
+end;
+
+procedure TfrmModelo.DBGrid1TitleClick(Column: TColumn);
+begin
+  // ordenação cds
+  TClientDataSet(DBGrid1.DataSource.DataSet).IndexFieldNames := Column.FieldName;
+  // ordenação firedac
+//  with TFDCustomQuery(DBGrid1.DataSource.DataSet) do
+//  begin
+//    if IndexFieldNames = Column.FieldName + ':D' then
+//      IndexFieldNames := Column.FieldName + ':A' // asc
+//    else
+//      IndexFieldNames := Column.FieldName + ':D'; // desc
+//  end;
+end;
+
+procedure TfrmModelo.edtPesquisarKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    actPesquisar.Execute;
+end;
+
+procedure TfrmModelo.PopularMemoria(pJson: TFDJSONDataSets);
+begin
+  memPesquisa.Active := False;
+  memPesquisa.AppendData(TFDJSONDataSetsReader.GetListValue(pJson,0));
+  memPesquisa.Active := True;
+end;
+
+end.

@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A70F9A5F-A5F8-4E01-8336-D06B69F94506}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="client\ModuloVendas.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="server\ModVendasServer.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ModuloVendas">
+        <MSBuild Projects="client\ModuloVendas.dproj"/>
+    </Target>
+    <Target Name="ModuloVendas:Clean">
+        <MSBuild Projects="client\ModuloVendas.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModuloVendas:Make">
+        <MSBuild Projects="client\ModuloVendas.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ModVendasServer">
+        <MSBuild Projects="server\ModVendasServer.dproj"/>
+    </Target>
+    <Target Name="ModVendasServer:Clean">
+        <MSBuild Projects="server\ModVendasServer.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModVendasServer:Make">
+        <MSBuild Projects="server\ModVendasServer.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ModuloVendas;ModVendasServer"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ModuloVendas:Clean;ModVendasServer:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ModuloVendas:Make;ModVendasServer:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

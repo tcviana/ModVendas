@@ -1,0 +1,47 @@
+inherited frmProdutos: TfrmProdutos
+  Caption = 'Produtos'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Panel1: TPanel
+    inherited lblNome: TLabel
+      Width = 73
+      Caption = 'Produtos'
+      ExplicitWidth = 73
+    end
+  end
+  inherited Panel2: TPanel
+    inherited DBGrid1: TDBGrid
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CODIGO'
+          Title.Alignment = taRightJustify
+          Title.Caption = '#'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NOME'
+          Title.Caption = 'Nome'
+          Width = 581
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'PRECO'
+          Title.Caption = 'Pre'#231'o'
+          Visible = True
+        end>
+    end
+  end
+  inherited ActionList1: TActionList
+    inherited actNovo: TAction
+      OnExecute = actNovoExecute
+    end
+    inherited actRemover: TAction
+      OnExecute = actRemoverExecute
+    end
+  end
+end

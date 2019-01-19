@@ -1,0 +1,32 @@
+program ModuloVendas;
+
+uses
+  Forms,
+  formPrincipal in 'formPrincipal.pas' {frmPrincipal},
+  classeCliente in '..\Common\classeCliente.pas',
+  classePessoa in '..\Common\classePessoa.pas',
+  classeProduto in '..\Common\classeProduto.pas',
+  classeVenda in '..\Common\classeVenda.pas',
+  classeVendaItem in '..\Common\classeVendaItem.pas',
+  formModelo in 'formModelo.pas' {frmModelo},
+  formClientes in 'formClientes.pas' {frmClientes},
+  formProdutos in 'formProdutos.pas' {frmProdutos},
+  formVendas in 'formVendas.pas' {frmVendas},
+  formModeloEdicao in 'formModeloEdicao.pas' {frmModeloEdicao},
+  formClientesEdicao in 'formClientesEdicao.pas' {frmClientesEdicao},
+  formProdutosEdicao in 'formProdutosEdicao.pas' {frmProdutosEdicao},
+  formVendasItens in 'formVendasItens.pas' {frmVendasItens},
+  formPesquisa in 'formPesquisa.pas' {frmPesquisa},
+  formSobre in 'formSobre.pas' {frmSobre},
+  dmVendas in 'dmVendas.pas' {dmConexao: TDataModule},
+  classeProxy in 'classeProxy.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TdmConexao, dmConexao);
+  Application.CreateForm(TdmConexao, dmConexao);
+  Application.Run;
+end.

@@ -1,0 +1,79 @@
+unit ServerMethods;
+
+interface
+
+uses System.SysUtils, System.Classes, System.Json,
+    Datasnap.DSServer, Datasnap.DSAuth, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MSSQL,
+  FireDAC.Phys.MSSQLDef, FireDAC.VCLUI.Wait, FireDAC.VCLUI.Error,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.Client, FireDAC.Stan.StorageBin, FireDAC.Phys.ODBCBase, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.UI;
+
+type
+{$METHODINFO ON}
+  TSM = class(TDataModule)
+    fdConexao: TFDConnection;
+    fdTransacao: TFDTransaction;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    FDGUIxErrorDialog1: TFDGUIxErrorDialog;
+    qryClientes: TFDQuery;
+    qryClientesCODIGO: TFDAutoIncField;
+    qryClientesNOME: TStringField;
+    qryClientesDATA_NASCIMENTO: TDateField;
+    qryClientesCPF: TStringField;
+    qryClientesEMAIL: TStringField;
+    qryClientesTELEFONE: TStringField;
+    qryProdutos: TFDQuery;
+    qryProdutosCODIGO: TFDAutoIncField;
+    qryProdutosNOME: TStringField;
+    qryProdutosPRECO: TBCDField;
+    qryVendas: TFDQuery;
+    qryVendasCODIGO: TFDAutoIncField;
+    qryVendasDATA_ABERTURA: TDateField;
+    qryVendasCLIENTE_CODIGO: TIntegerField;
+    qryVendasCliente: TStringField;
+    qryVendasCPF: TStringField;
+    qryVendasVALOR: TBCDField;
+    qryVendasItens: TFDQuery;
+    qryVendasItensCODIGO: TFDAutoIncField;
+    qryVendasItensITEM: TIntegerField;
+    qryVendasItensQUANTIDADE: TIntegerField;
+    qryVendasItensVENDAS_CODIGO: TIntegerField;
+    qryVendasItensPRODUTOS_CODIGO: TIntegerField;
+    qryVendasItensPRECO: TBCDField;
+    qryVendasItensProduto: TStringField;
+    qryGeral: TFDQuery;
+    FDPhysMSSQLDriverLink: TFDPhysMSSQLDriverLink;
+    FDStanStorageBinLink: TFDStanStorageBinLink;
+    cmdGeral: TFDCommand;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function EchoString(Value: string): string;
+    function ReverseString(Value: string): string;
+  end;
+{$METHODINFO OFF}
+
+implementation
+
+
+{$R *.dfm}
+
+
+uses System.StrUtils;
+
+function TSM.EchoString(Value: string): string;
+begin
+  Result := Value;
+end;
+
+function TSM.ReverseString(Value: string): string;
+begin
+  Result := System.StrUtils.ReverseString(Value);
+end;
+
+end.
+

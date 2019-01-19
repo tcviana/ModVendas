@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2018/08/25 19:26:42.000.503,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\WebModuleUnit1.pas</Transaction>
+    <Transaction>2018/08/25 19:26:42.000.227,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\FormUnit1.pas</Transaction>
+    <Transaction>2018/08/25 19:27:55.000.938,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\FormUnit1.pas</Transaction>
+    <Transaction>2018/08/25 19:27:56.000.227,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\ServerMethodsUnit1.pas</Transaction>
+    <Transaction>2018/08/25 19:27:57.000.772,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\WebModuleUnit1.pas</Transaction>
+    <Transaction>2019/01/16 21:07:13.000.333,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\FormUnit1.pas</Transaction>
+    <Transaction>2019/01/16 21:07:46.000.732,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\ServerMethodsUnit1.pas</Transaction>
+    <Transaction>2019/01/16 21:07:56.000.124,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\WebModuleUnit1.pas</Transaction>
+    <Transaction>2019/01/18 21:03:15.000.003,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\FormUnit1.pas</Transaction>
+    <Transaction>2019/01/18 21:03:15.000.743,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\ServerMethodsUnit1.pas</Transaction>
+    <Transaction>2019/01/18 21:03:16.000.237,=C:\Users\Adm\Documents\Embarcadero\Studio\Projects\WebModuleUnit1.pas</Transaction>
+    <Transaction>2019/01/18 21:09:06.000.491,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\FormUnit1.dfm=C:\Users\Adm\Documents\ModVendas\uMain.dfm</Transaction>
+    <Transaction>2019/01/18 21:09:06.000.491,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\FormUnit1.pas=C:\Users\Adm\Documents\ModVendas\uMain.pas</Transaction>
+    <Transaction>2019/01/18 21:09:22.000.938,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\WebModuleUnit1.dfm=C:\Users\Adm\Documents\ModVendas\WebModule.dfm</Transaction>
+    <Transaction>2019/01/18 21:09:22.000.938,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\WebModuleUnit1.pas=C:\Users\Adm\Documents\ModVendas\WebModule.pas</Transaction>
+    <Transaction>2019/01/18 21:09:30.000.519,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\ServerMethodsUnit1.pas=C:\Users\Adm\Documents\ModVendas\ServerMethods.pas</Transaction>
+    <Transaction>2019/01/18 21:09:30.000.519,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\ServerMethodsUnit1.dfm=C:\Users\Adm\Documents\ModVendas\ServerMethods.dfm</Transaction>
+    <Transaction>2019/01/18 21:09:53.000.810,C:\Users\Adm\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Adm\Documents\ModVendas\ModVendasServer.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

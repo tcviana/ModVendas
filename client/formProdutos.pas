@@ -1,0 +1,123 @@
+unit formProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, formModelo, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, System.Actions, Vcl.ActnList,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, classeProduto;
+
+type
+  TfrmProdutos = class(TfrmModelo)
+    procedure actPesquisarExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actNovoExecute(Sender: TObject);
+    procedure actEditarExecute(Sender: TObject);
+    procedure actRemoverExecute(Sender: TObject);
+  protected
+    FProduto : TProduto;
+  private
+    { Private declarations }
+    procedure AbrirEdicao(pEditar:Boolean);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmProdutos: TfrmProdutos;
+
+implementation
+
+{$R *.dfm}
+
+uses dmVendas, formProdutosEdicao, Data.FireDACJSONReflect;
+
+procedure TfrmProdutos.AbrirEdicao(pEditar: Boolean);
+var
+  iRec : Integer;
+begin
+  Self.Hide;
+  frmProdutosEdicao := TfrmProdutosEdicao.Create(Self);
+  try
+    iRec := memPesquisa.RecNo;
+    if pEditar then
+    begin
+      frmProdutosEdicao.edtCodigo.Text := memPesquisa.FieldByName('CODIGO').AsString;
+      frmProdutosEdicao.edtPreco.Text := memPesquisa.FieldByName('PRECO').AsString;
+      frmProdutosEdicao.edtNome.Text := memPesquisa.FieldByName('NOME').AsString;
+    end;
+    frmProdutosEdicao.ShowModal;
+    actPesquisar.Execute;
+    if not memPesquisa.IsEmpty then
+    begin
+      try
+        memPesquisa.RecNo := iRec;
+      except
+        memPesquisa.First;
+      end;
+    end;
+  finally
+    frmProdutosEdicao.Free;
+    Self.Show;
+  end;
+end;
+
+procedure TfrmProdutos.actEditarExecute(Sender: TObject);
+begin
+  inherited;
+  AbrirEdicao(True);
+end;
+
+procedure TfrmProdutos.actNovoExecute(Sender: TObject);
+begin
+  inherited;
+  AbrirEdicao(False);
+end;
+
+procedure TfrmProdutos.actPesquisarExecute(Sender: TObject);
+var
+  qryJson: TFDJSONDataSets;
+begin
+  qryJson := dmConexao.PesquisarProdutos(edtPesquisar.Text);
+  PopularMemoria(qryJson);
+  inherited;
+end;
+
+procedure TfrmProdutos.actRemoverExecute(Sender: TObject);
+var
+  iRec : Integer;
+begin
+  inherited;
+  if MessageDlg('Confirma a exclusão do Produto?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+  begin
+    if dmConexao.SM.ProdutoRemover(memPesquisa.FieldByName('CODIGO').AsInteger) then
+    begin
+      iRec := memPesquisa.RecNo;
+      actPesquisar.Execute;
+      try
+        memPesquisa.RecNo := iRec;
+      except
+        memPesquisa.Last;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmProdutos.FormCreate(Sender: TObject);
+begin
+  inherited;
+  FProduto := TProduto.Create;
+  actPesquisar.Execute;
+end;
+
+procedure TfrmProdutos.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  FProduto.Free;
+end;
+
+end.

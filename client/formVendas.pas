@@ -1,0 +1,152 @@
+unit formVendas;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Data.FireDACJSONReflect,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, formModelo, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, System.Actions, Vcl.ActnList,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, classeVenda, frxClass,
+  frxDBSet, Vcl.ComCtrls;
+
+type
+  TfrmVendas = class(TfrmModelo)
+    frxRelatorioVendas: TfrxReport;
+    frxDbVendas: TfrxDBDataset;
+    Button1: TButton;
+    actImprimir: TAction;
+    dtpInicial: TDateTimePicker;
+    dtpFinal: TDateTimePicker;
+    lbl1: TLabel;
+    lbl2: TLabel;
+    procedure actPesquisarExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure actRemoverExecute(Sender: TObject);
+    procedure actNovoExecute(Sender: TObject);
+    procedure actEditarExecute(Sender: TObject);
+    procedure actImprimirExecute(Sender: TObject);
+  protected
+    FVenda : TVenda;
+  private
+    { Private declarations }
+    procedure AbrirEdicao(pEditar:Boolean);
+
+  public
+    { Public declarations }
+  end;
+
+var
+  frmVendas: TfrmVendas;
+
+implementation
+
+{$R *.dfm}
+
+uses dmVendas, formVendasItens;
+
+procedure TfrmVendas.AbrirEdicao(pEditar: Boolean);
+var
+  iRec : Integer;
+begin
+  Self.Hide;
+  frmVendasItens := TfrmVendasItens.Create(Self);
+  try
+    iRec := memPesquisa.RecNo;
+    if pEditar then
+    begin
+      frmVendasItens.edtCodigo.Text := memPesquisa.FieldByName('CODIGO').AsString;
+      frmVendasItens.edtCPF.Text := memPesquisa.FieldByName('CPF').AsString;
+      frmVendasItens.edtData.Date := memPesquisa.FieldByName('DATA_ABERTURA').AsDateTime;
+      frmVendasItens.edtNome.Text := memPesquisa.FieldByName('Cliente').AsString;
+      frmVendasItens.edtCliente.Text := memPesquisa.FieldByName('CLIENTE_CODIGO').AsString;
+    end;
+    frmVendasItens.ShowModal;
+    actPesquisar.Execute;
+    if not memPesquisa.IsEmpty then
+    begin
+      try
+        memPesquisa.RecNo := iRec;
+      except
+        memPesquisa.First;
+      end;
+    end;
+  finally
+    frmVendasItens.Free;
+    Self.Show;
+  end;
+end;
+
+procedure TfrmVendas.actEditarExecute(Sender: TObject);
+begin
+  inherited;
+  memPesquisa.FieldByName('Valor').AsCurrency;
+  AbrirEdicao(True);
+end;
+
+procedure TfrmVendas.actImprimirExecute(Sender: TObject);
+begin
+  inherited;
+  if memPesquisa.IsEmpty then
+    ShowMessage('Não há venda para imprimir.')
+  else
+  begin
+    frxRelatorioVendas.PrepareReport;
+    frxRelatorioVendas.ShowPreparedReport;
+  end;
+end;
+
+procedure TfrmVendas.actNovoExecute(Sender: TObject);
+begin
+  inherited;
+  AbrirEdicao(False);
+end;
+
+procedure TfrmVendas.actPesquisarExecute(Sender: TObject);
+var
+  qryJson:TFDJSONDataSets;
+begin
+  qryJson := dmConexao.PesquisarVendas(edtPesquisar.Text,dtpInicial.Date,dtpFinal.Date);
+  PopularMemoria(qryJson);
+  inherited;
+end;
+
+procedure TfrmVendas.actRemoverExecute(Sender: TObject);
+var
+  iRec : Integer;
+begin
+  inherited;
+  if MessageDlg('Confirma a exclusão desta Venda?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+  begin
+    if dmConexao.SM.VendaRemover(memPesquisa.FieldByName('CODIGO').AsInteger) then
+    begin
+      iRec := memPesquisa.RecNo;
+      actPesquisar.Execute;
+      try
+        memPesquisa.RecNo := iRec;
+      except
+        memPesquisa.Last;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmVendas.FormCreate(Sender: TObject);
+begin
+  inherited;
+  FVenda := TVenda.Create;
+  dtpInicial.Date := Date - 60;
+  dtpFinal.Date := Date;
+  actPesquisar.Execute;
+end;
+
+procedure TfrmVendas.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  FVenda.Free;
+end;
+
+end.
