@@ -95,6 +95,7 @@ type
     { Private declarations }
     function Salvar:Boolean;
     procedure LimparCampos;
+    procedure AbrirPesquisa(pTabela:string);
     procedure AbrirPesquisaClientes();
     procedure AbrirPesquisaProdutos();
     procedure PreencherVendaItens;
@@ -122,18 +123,31 @@ uses formPesquisa, dmVendas, Data.FireDACJSONReflect;
 
 {$R *.dfm}
 
-procedure TfrmVendasItens.AbrirPesquisaClientes;
+procedure TfrmVendasItens.AbrirPesquisa(pTabela: string);
 begin
   frmPesquisa := TfrmPesquisa.Create(Self);
   try
-    frmPesquisa.Tabela := CLIENTES;
+    frmPesquisa.Script.Add('SELECT * FROM '+pTabela);
     frmPesquisa.ShowModal;
     if frmPesquisa.ModalResult = mrOk then
       FCodigo := frmPesquisa.Codigo
     else
       FCodigo := 0;
+  finally
+    frmPesquisa.Free;
+  end;
+end;
 
-    FVenda.ClienteCodigo := FCodigo;
+procedure TfrmVendasItens.AbrirPesquisaClientes;
+begin
+  frmPesquisa := TfrmPesquisa.Create(Self);
+  try
+    frmPesquisa.Script.Add('SELECT * FROM '+pTabela);
+    frmPesquisa.ShowModal;
+    if frmPesquisa.ModalResult = mrOk then
+      FCodigo := frmPesquisa.Codigo
+    else
+      FCodigo := 0;
   finally
     frmPesquisa.Free;
   end;
@@ -143,13 +157,12 @@ procedure TfrmVendasItens.AbrirPesquisaProdutos;
 begin
   frmPesquisa := TfrmPesquisa.Create(Self);
   try
-    frmPesquisa.Tabela := PRODUTOS;
+    frmPesquisa.Script.Add('SELECT * FROM '+pTabela);
     frmPesquisa.ShowModal;
     if frmPesquisa.ModalResult = mrOk then
       FCodigo := frmPesquisa.Codigo
     else
       FCodigo := 0;
-    FVendaItem.ProdutoCodigo := FCodigo;
   finally
     frmPesquisa.Free;
   end;
@@ -349,7 +362,8 @@ end;
 procedure TfrmVendasItens.edtClienteRightButtonClick(Sender: TObject);
 begin
   inherited;
-  AbrirPesquisaClientes();
+  AbrirPesquisa('CLIENTES');
+  FVenda.ClienteCodigo := FCodigo;
   if LocalizarCliente() then
   begin
     PreencherObjetoCliente();
@@ -382,7 +396,8 @@ begin
   inherited;
   if memItens.State in [dsEdit,dsInsert] then
   begin
-    AbrirPesquisaProdutos();
+    AbrirPesquisa('PRODUTOS');
+    FVendaItem.ProdutoCodigo := FCodigo;
     if LocalizarProduto() then
     begin
       PreencherObjetoProduto();

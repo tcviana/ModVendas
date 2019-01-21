@@ -105,7 +105,8 @@ type
     procedure AdicionaItensNoPedido();
     procedure CriarVenda();
     function LocalizarProduto():Boolean;
-    procedure PreencherObjetoVendaItens();
+    function LocalizarCliente():Boolean;
+    procedure PreencherObjetoProduto();
   public
     { Public declarations }
   end;
@@ -310,15 +311,17 @@ begin
   begin
     FVenda.ClienteCodigo := StrToInt(edtCliente.Text);
     // pesquisa o cliente para seu preenchimento
-    if not dmConexao.PesquisarClienteCodigo(FVenda.ClienteCodigo) then
+    if LocalizarCliente() then
+    begin
+      PreencherObjetoCliente();
+      PreencherCliente();
+    end
+    else
     begin
       ShowMessage('Cliente não localizado.');
       edtClienteRightButtonClick(Sender);
       Exit;
     end;
-    dmConexao.qryClientes.Active := False;
-    dmConexao.qryClientes.Active := True;
-    PreencherCliente(dmConexao.qryClientes);
   end;
   if btnInserir.Enabled then
     btnInserir.SetFocus;
@@ -329,7 +332,11 @@ begin
   inherited;
   AbrirPesquisa('CLIENTES');
   FVenda.ClienteCodigo := FCodigo;
-  PreencherCliente(dmConexao.qryGeral);
+  if LocalizarCliente() then
+  begin
+    PreencherObjetoCliente();
+    PreencherCliente();
+  end;
 end;
 
 procedure TfrmVendasItens.edtItemProdutoExit(Sender: TObject);
@@ -358,8 +365,11 @@ begin
   begin
     AbrirPesquisa('PRODUTOS');
     FVendaItem.ProdutoCodigo := FCodigo;
-    LocalizarProduto();
-    PreencherItemProduto();
+    if LocalizarProduto() then
+    begin
+      PreencherObjetoProduto();
+      PreencherItemProduto();
+    end;
   end;
 end;
 
@@ -399,10 +409,14 @@ begin
   CalcularValorTotal;
 end;
 
+function TfrmVendasItens.LocalizarCliente(): Boolean;
+begin
+  Result := dmConexao.PesquisarClienteCodigo(FVenda.ClienteCodigo);
+end;
+
 function TfrmVendasItens.LocalizarProduto():Boolean;
 begin
   Result := dmConexao.PesquisarProdutoCodigo(FVendaItem.ProdutoCodigo);
-  PreencherObjetoVendaItens();
 end;
 
 procedure TfrmVendasItens.memItensAfterDelete(DataSet: TDataSet);
@@ -475,7 +489,7 @@ end;
 
 procedure TfrmVendasItens.PreencherCliente();
 begin
-  edtCliente.Text := FVenda.ClienteCodigo;
+  edtCliente.Text := IntToStr(FVenda.ClienteCodigo);
   edtCPF.Text := FVenda.ClienteCPF;
   edtNome.Text := FVenda.ClienteNome;
 end;
@@ -504,9 +518,9 @@ begin
   end;
 end;
 
-procedure TfrmVendasItens.PreencherObjetoVendaItens;
+procedure TfrmVendasItens.PreencherObjetoProduto();
 begin
-  if dmConexao.qryGeral.IsEmpty then
+  if dmConexao.qryProdutos.IsEmpty then
   begin
     FVendaItem.ProdutoNome := '';
     FVendaItem.ProdutoPreco := 0;

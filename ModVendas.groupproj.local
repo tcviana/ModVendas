@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions/>
-  <Default.Personality>
-    <Projects ActiveProject="C:\Users\Adm\Documents\ModVendas\server\ModVendasServer.dproj"/>
-  </Default.Personality>
+	<Transactions/>
+	<Default.Personality>
+		<Projects ActiveProject="C:\Users\Adm\Documents\ModVendas\client\ModuloVendas.dproj"/>
+	</Default.Personality>
 </BorlandProject>

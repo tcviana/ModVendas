@@ -43,8 +43,7 @@ type
     { Public declarations }
     property Codigo:Integer read FCodigo write FCodigo;
     property Nome:string read FNome write FNome;
-    property Tabela:TTabela read FTabela write FTabela;
-
+    constructor Create(pTabela:TTabela);
   end;
 
 var
@@ -73,6 +72,11 @@ begin
   FCodigo := qryGeral.FieldByName('CODIGO').AsInteger;
   FNome := qryGeral.FieldByName('NOME').AsString;
   ModalResult := mrOk;
+end;
+
+constructor TfrmPesquisa.Create(pTabela: TTabela);
+begin
+  FTabela := pTabela;
 end;
 
 procedure TfrmPesquisa.DBGrid1DblClick(Sender: TObject);

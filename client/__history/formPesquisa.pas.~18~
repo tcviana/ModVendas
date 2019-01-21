@@ -30,6 +30,7 @@ type
     procedure actCancelarExecute(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     FCodigo: Integer;
     FNome: string;
@@ -40,10 +41,10 @@ type
     procedure AbrirConexao();
     { Private declarations }
   public
+    constructor Create(AOwner: TComponent;pTabela:TTabela); override;
     { Public declarations }
     property Codigo:Integer read FCodigo write FCodigo;
     property Nome:string read FNome write FNome;
-    property Tabela:TTabela read FTabela write FTabela;
 
   end;
 
@@ -75,9 +76,20 @@ begin
   ModalResult := mrOk;
 end;
 
+constructor TfrmPesquisa.Create(AOwner: TComponent;pTabela:TTabela);
+begin
+  inherited;
+  FTabela:=pTabela;
+end;
+
 procedure TfrmPesquisa.DBGrid1DblClick(Sender: TObject);
 begin
   actOk.Execute;
+end;
+
+procedure TfrmPesquisa.FormCreate(Sender: TObject);
+begin
+  //
 end;
 
 procedure TfrmPesquisa.FormShow(Sender: TObject);

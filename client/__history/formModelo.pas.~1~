@@ -64,7 +64,8 @@ end;
 
 procedure TfrmModelo.actPesquisarExecute(Sender: TObject);
 begin
-  //
+  //TClientDataSet(dsPesquisa.DataSet).Active := False;
+  //TClientDataSet(dsPesquisa.DataSet).Active := True;
 end;
 
 procedure TfrmModelo.actSairExecute(Sender: TObject);

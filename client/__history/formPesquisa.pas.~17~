@@ -43,7 +43,6 @@ type
     { Public declarations }
     property Codigo:Integer read FCodigo write FCodigo;
     property Nome:string read FNome write FNome;
-    property Tabela:TTabela read FTabela write FTabela;
 
   end;
 

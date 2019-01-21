@@ -18,6 +18,7 @@ type
     procedure actNovoExecute(Sender: TObject);
     procedure actEditarExecute(Sender: TObject);
     procedure actRemoverExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   protected
     FProduto : TProduto;
   private
@@ -84,7 +85,7 @@ var
 begin
   qryJson := dmConexao.PesquisarProdutos(edtPesquisar.Text);
   PopularMemoria(qryJson);
-  TCurrencyField(memPesquisa.FieldByName('PRECO')).DisplayFormat:='0.00';
+  inherited;
 end;
 
 procedure TfrmProdutos.actRemoverExecute(Sender: TObject);
@@ -118,6 +119,12 @@ procedure TfrmProdutos.FormDestroy(Sender: TObject);
 begin
   inherited;
   FProduto.Free;
+end;
+
+procedure TfrmProdutos.FormShow(Sender: TObject);
+begin
+  inherited;
+  TCurrencyField(memPesquisa.FieldByName('PRECO')).DisplayFormat:='0.00';
 end;
 
 end.

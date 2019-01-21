@@ -95,16 +95,19 @@ type
     { Private declarations }
     function Salvar:Boolean;
     procedure LimparCampos;
-    procedure AbrirPesquisa(pTabela:string);
+    procedure AbrirPesquisaClientes();
+    procedure AbrirPesquisaProdutos();
     procedure PreencherVendaItens;
     procedure PreencherItemProduto();
     procedure CalcularValorTotal;
-    procedure PreencherCliente(const pConsulta:TFDMemTable);
+    procedure PreencherCliente();
+    procedure PreencherObjetoCliente();
     procedure PopularTabela();
     procedure AdicionaItensNoPedido();
     procedure CriarVenda();
     function LocalizarProduto():Boolean;
-    procedure PreencherObjetoVendaItens();
+    function LocalizarCliente():Boolean;
+    procedure PreencherObjetoProduto();
   public
     { Public declarations }
   end;
@@ -119,11 +122,24 @@ uses formPesquisa, dmVendas, Data.FireDACJSONReflect;
 
 {$R *.dfm}
 
-procedure TfrmVendasItens.AbrirPesquisa(pTabela: string);
+procedure TfrmVendasItens.AbrirPesquisaClientes;
 begin
-  frmPesquisa := TfrmPesquisa.Create(Self);
+  frmPesquisa := TfrmPesquisa.Create(CLIENTES);
   try
-    frmPesquisa.Script.Add('SELECT * FROM '+pTabela);
+    frmPesquisa.ShowModal;
+    if frmPesquisa.ModalResult = mrOk then
+      FCodigo := frmPesquisa.Codigo
+    else
+      FCodigo := 0;
+  finally
+    frmPesquisa.Free;
+  end;
+end;
+
+procedure TfrmVendasItens.AbrirPesquisaProdutos;
+begin
+  frmPesquisa := TfrmPesquisa.Create(PRODUTOS);
+  try
     frmPesquisa.ShowModal;
     if frmPesquisa.ModalResult = mrOk then
       FCodigo := frmPesquisa.Codigo
@@ -309,15 +325,17 @@ begin
   begin
     FVenda.ClienteCodigo := StrToInt(edtCliente.Text);
     // pesquisa o cliente para seu preenchimento
-    if not dmConexao.PesquisarClienteCodigo(FVenda.ClienteCodigo) then
+    if LocalizarCliente() then
+    begin
+      PreencherObjetoCliente();
+      PreencherCliente();
+    end
+    else
     begin
       ShowMessage('Cliente não localizado.');
       edtClienteRightButtonClick(Sender);
       Exit;
     end;
-    dmConexao.qryClientes.Active := False;
-    dmConexao.qryClientes.Active := True;
-    PreencherCliente(dmConexao.qryClientes);
   end;
   if btnInserir.Enabled then
     btnInserir.SetFocus;
@@ -328,7 +346,11 @@ begin
   inherited;
   AbrirPesquisa('CLIENTES');
   FVenda.ClienteCodigo := FCodigo;
-  PreencherCliente(dmConexao.qryGeral);
+  if LocalizarCliente() then
+  begin
+    PreencherObjetoCliente();
+    PreencherCliente();
+  end;
 end;
 
 procedure TfrmVendasItens.edtItemProdutoExit(Sender: TObject);
@@ -345,6 +367,7 @@ begin
         edtItemProdutoRightButtonClick(Sender);
         Exit;
       end;
+      PreencherObjetoProduto();
       PreencherItemProduto();
     end;
   end;
@@ -357,8 +380,11 @@ begin
   begin
     AbrirPesquisa('PRODUTOS');
     FVendaItem.ProdutoCodigo := FCodigo;
-    LocalizarProduto();
-    PreencherItemProduto();
+    if LocalizarProduto() then
+    begin
+      PreencherObjetoProduto();
+      PreencherItemProduto();
+    end;
   end;
 end;
 
@@ -398,10 +424,14 @@ begin
   CalcularValorTotal;
 end;
 
+function TfrmVendasItens.LocalizarCliente(): Boolean;
+begin
+  Result := dmConexao.PesquisarClienteCodigo(FVenda.ClienteCodigo);
+end;
+
 function TfrmVendasItens.LocalizarProduto():Boolean;
 begin
   Result := dmConexao.PesquisarProdutoCodigo(FVendaItem.ProdutoCodigo);
-  PreencherObjetoVendaItens();
 end;
 
 procedure TfrmVendasItens.memItensAfterDelete(DataSet: TDataSet);
@@ -472,11 +502,11 @@ begin
   memItens.Active := True;
 end;
 
-procedure TfrmVendasItens.PreencherCliente(const pConsulta:TFDMemTable);
+procedure TfrmVendasItens.PreencherCliente();
 begin
-  edtCliente.Text := pConsulta.FieldByName('CODIGO').AsString;
-  edtCPF.Text := pConsulta.FieldByName('CPF').AsString;
-  edtNome.Text := pConsulta.FieldByName('NOME').AsString;;
+  edtCliente.Text := IntToStr(FVenda.ClienteCodigo);
+  edtCPF.Text := FVenda.ClienteCPF;
+  edtNome.Text := FVenda.ClienteNome;
 end;
 
 procedure TfrmVendasItens.PreencherItemProduto();
@@ -487,17 +517,33 @@ begin
   memItensPRECO.AsFloat := FVendaItem.ProdutoPreco;
 end;
 
-procedure TfrmVendasItens.PreencherObjetoVendaItens;
+procedure TfrmVendasItens.PreencherObjetoCliente();
 begin
-  if dmConexao.qryGeral.IsEmpty then
+  if dmConexao.qryClientes.IsEmpty then
+  begin
+    FVenda.ClienteCodigo := 0;
+    FVenda.ClienteCPF := '';
+    FVenda.ClienteNome := '';
+  end
+  else
+  begin
+    FVenda.ClienteCodigo := dmConexao.qryClientes.FieldByName('CODIGO').AsInteger;
+    FVenda.ClienteCPF := dmConexao.qryClientes.FieldByName('CPF').AsString;
+    FVenda.ClienteNome := dmConexao.qryClientes.FieldByName('NOME').AsString;;
+  end;
+end;
+
+procedure TfrmVendasItens.PreencherObjetoProduto();
+begin
+  if dmConexao.qryProdutos.IsEmpty then
   begin
     FVendaItem.ProdutoNome := '';
     FVendaItem.ProdutoPreco := 0;
   end
   else
   begin
-    FVendaItem.ProdutoNome := dmConexao.qryGeral.FieldByName('NOME').AsString;
-    FVendaItem.ProdutoPreco := dmConexao.qryGeral.FieldByName('PRECO').AsCurrency;
+    FVendaItem.ProdutoNome := dmConexao.qryProdutos.FieldByName('NOME').AsString;
+    FVendaItem.ProdutoPreco := dmConexao.qryProdutos.FieldByName('PRECO').AsCurrency;
   end;
 end;
 

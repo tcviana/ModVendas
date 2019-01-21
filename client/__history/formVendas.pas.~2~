@@ -29,6 +29,7 @@ type
     procedure actNovoExecute(Sender: TObject);
     procedure actEditarExecute(Sender: TObject);
     procedure actImprimirExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   protected
     FVenda : TVenda;
   private
@@ -111,7 +112,7 @@ var
 begin
   qryJson := dmConexao.PesquisarVendas(edtPesquisar.Text,dtpInicial.Date,dtpFinal.Date);
   PopularMemoria(qryJson);
-  TCurrencyField(memPesquisa.FieldByName('VALOR')).DisplayFormat:='0.00';
+  inherited;
 end;
 
 procedure TfrmVendas.actRemoverExecute(Sender: TObject);
@@ -147,6 +148,12 @@ procedure TfrmVendas.FormDestroy(Sender: TObject);
 begin
   inherited;
   FVenda.Free;
+end;
+
+procedure TfrmVendas.FormShow(Sender: TObject);
+begin
+  inherited;
+  TCurrencyField(memPesquisa.FieldByName('valor')).DisplayFormat:=0.00;
 end;
 
 end.

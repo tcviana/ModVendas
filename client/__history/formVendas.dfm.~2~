@@ -2,6 +2,7 @@ inherited frmVendas: TfrmVendas
   Caption = 'Vendas'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   ExplicitWidth = 790
   ExplicitHeight = 438
   PixelsPerInch = 96

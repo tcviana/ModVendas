@@ -124,9 +124,8 @@ uses formPesquisa, dmVendas, Data.FireDACJSONReflect;
 
 procedure TfrmVendasItens.AbrirPesquisaClientes;
 begin
-  frmPesquisa := TfrmPesquisa.Create(Self);
+  frmPesquisa := TfrmPesquisa.Create(CLIENTES);
   try
-    frmPesquisa.Tabela := CLIENTES;
     frmPesquisa.ShowModal;
     if frmPesquisa.ModalResult = mrOk then
       FCodigo := frmPesquisa.Codigo
@@ -141,9 +140,8 @@ end;
 
 procedure TfrmVendasItens.AbrirPesquisaProdutos;
 begin
-  frmPesquisa := TfrmPesquisa.Create(Self);
+  frmPesquisa := TfrmPesquisa.Create(PRODUTOS);
   try
-    frmPesquisa.Tabela := PRODUTOS;
     frmPesquisa.ShowModal;
     if frmPesquisa.ModalResult = mrOk then
       FCodigo := frmPesquisa.Codigo

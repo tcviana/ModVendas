@@ -34,7 +34,6 @@ type
     FCodigo: Integer;
     FNome: string;
     FDSJson: TFDJSONDataSets;
-    FTabela : TTabela;
 
     procedure GeraQuery(pTabela:TTabela);
     procedure AbrirConexao();
@@ -43,8 +42,7 @@ type
     { Public declarations }
     property Codigo:Integer read FCodigo write FCodigo;
     property Nome:string read FNome write FNome;
-    property Tabela:TTabela read FTabela write FTabela;
-
+    constructor Create(pTabela:TTabela);
   end;
 
 var
@@ -75,6 +73,11 @@ begin
   ModalResult := mrOk;
 end;
 
+constructor TfrmPesquisa.Create(pTabela: TTabela);
+begin
+  GeraQuery(pTabela);
+end;
+
 procedure TfrmPesquisa.DBGrid1DblClick(Sender: TObject);
 begin
   actOk.Execute;
@@ -82,7 +85,6 @@ end;
 
 procedure TfrmPesquisa.FormShow(Sender: TObject);
 begin
-  GeraQuery(FTabela);
   AbrirConexao();
 end;
 

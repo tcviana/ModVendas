@@ -112,6 +112,7 @@ begin
   qryJson := dmConexao.PesquisarVendas(edtPesquisar.Text,dtpInicial.Date,dtpFinal.Date);
   PopularMemoria(qryJson);
   TCurrencyField(memPesquisa.FieldByName('VALOR')).DisplayFormat:='0.00';
+  inherited;
 end;
 
 procedure TfrmVendas.actRemoverExecute(Sender: TObject);

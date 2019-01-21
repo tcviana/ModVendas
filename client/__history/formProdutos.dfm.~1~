@@ -2,8 +2,6 @@ inherited frmProdutos: TfrmProdutos
   Caption = 'Produtos'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  ExplicitWidth = 790
-  ExplicitHeight = 438
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
@@ -31,10 +29,8 @@ inherited frmProdutos: TfrmProdutos
           Visible = True
         end
         item
-          Alignment = taRightJustify
           Expanded = False
           FieldName = 'PRECO'
-          Title.Alignment = taRightJustify
           Title.Caption = 'Pre'#231'o'
           Visible = True
         end>

@@ -39,7 +39,6 @@ type
     procedure actEditarExecute(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure DBGrid1TitleClick(Column: TColumn);
-    procedure actPesquisarExecute(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -60,11 +59,6 @@ uses dmVendas;
 procedure TfrmModelo.actEditarExecute(Sender: TObject);
 begin
   // abre tela de edição
-end;
-
-procedure TfrmModelo.actPesquisarExecute(Sender: TObject);
-begin
-  //
 end;
 
 procedure TfrmModelo.actSairExecute(Sender: TObject);

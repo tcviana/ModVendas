@@ -75,6 +75,11 @@ begin
   ModalResult := mrOk;
 end;
 
+constructor TfrmPesquisa.Create(pTabela:TTabela);
+begin
+  FTabela:=pTabela;
+end;
+
 procedure TfrmPesquisa.DBGrid1DblClick(Sender: TObject);
 begin
   actOk.Execute;

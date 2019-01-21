@@ -626,7 +626,6 @@ inherited frmVendasItens: TfrmVendasItens
     object memItensVALOR_TOTAL: TCurrencyField
       FieldKind = fkCalculated
       FieldName = 'VALOR_TOTAL'
-      DisplayFormat = '0.00'
       Calculated = True
     end
   end

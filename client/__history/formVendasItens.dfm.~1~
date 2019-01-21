@@ -5,6 +5,7 @@ inherited frmVendasItens: TfrmVendasItens
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  ExplicitTop = -55
   ExplicitWidth = 475
   ExplicitHeight = 472
   PixelsPerInch = 96
@@ -423,7 +424,7 @@ inherited frmVendasItens: TfrmVendasItens
     Left = 56
     Top = 9
     Bitmap = {
-      494C010101004C004C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101004800480010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -626,7 +627,6 @@ inherited frmVendasItens: TfrmVendasItens
     object memItensVALOR_TOTAL: TCurrencyField
       FieldKind = fkCalculated
       FieldName = 'VALOR_TOTAL'
-      DisplayFormat = '0.00'
       Calculated = True
     end
   end

@@ -84,7 +84,7 @@ var
 begin
   qryJson := dmConexao.PesquisarProdutos(edtPesquisar.Text);
   PopularMemoria(qryJson);
-  TCurrencyField(memPesquisa.FieldByName('PRECO')).DisplayFormat:='0.00';
+  inherited;
 end;
 
 procedure TfrmProdutos.actRemoverExecute(Sender: TObject);
